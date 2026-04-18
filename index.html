@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An interactive learning game for middle school students to master percentages, discounts, and price relationships using a stretchable percentage number line.">
+    <title>Discount Den – Learn Percentages & Discounts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Audio elements for game sounds -->
+    <audio id="click-sound" preload="auto" src="click.mp3"></audio>
+    <audio id="success-sound" preload="auto" src="success.mp3"></audio>
+    <audio id="error-sound" preload="auto" src="error.mp3"></audio>
+    <audio id="slide-sound" preload="auto" src="slide.mp3"></audio>
+</head>
+<body>
+    <!-- ======== SPLASH / START SCREEN ======== -->
+    <div id="splash-screen" class="screen active">
+        <div class="splash-content">
+            <div class="splash-shelves">
+                <div class="shelf-item" style="animation-delay:0s">🧸</div>
+                <div class="shelf-item" style="animation-delay:0.4s">🤖</div>
+                <div class="shelf-item" style="animation-delay:0.8s">🚀</div>
+                <div class="shelf-item" style="animation-delay:1.2s">⚽</div>
+                <div class="shelf-item" style="animation-delay:1.6s">🎸</div>
+            </div>
+            <h1 class="game-title">
+                <span class="title-icon">🏪</span>
+                <span class="title-text">Discount Den</span>
+            </h1>
+            <p class="subtitle">Help Munchy the Monster run the shop!</p>
+
+            <div class="splash-monster-row">
+                <div class="monster-body" id="splash-monster">
+                    <div class="monster-eye left-eye"><div class="pupil"></div></div>
+                    <div class="monster-eye right-eye"><div class="pupil"></div></div>
+                    <div class="monster-mouth happy"></div>
+                    <div class="monster-horn left-horn"></div>
+                    <div class="monster-horn right-horn"></div>
+                </div>
+                <div class="speech-bubble splash-bubble">
+                    <p>Hey there! I need your help with prices today! 🎉</p>
+                </div>
+            </div>
+
+            <button id="start-btn" class="btn btn-primary btn-large pulse-btn">
+                <span>Start Playing!</span>
+                <span class="btn-sparkle">✨</span>
+            </button>
+
+            <div class="level-select">
+                <p class="level-label">Choose Difficulty:</p>
+                <div class="level-buttons">
+                    <button class="btn btn-level active" data-level="1">⭐ Level 1</button>
+                    <button class="btn btn-level" data-level="2">⭐⭐ Level 2</button>
+                    <button class="btn btn-level locked" data-level="3">🔒 Level 3</button>
+                    <button class="btn btn-level locked" data-level="4">🔒 Level 4</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== GAME SCREEN ======== -->
+    <div id="game-screen" class="screen">
+        <!-- TOP BAR -->
+        <header id="top-bar">
+            <div class="top-bar-left">
+                <div class="level-badge">Level <span id="current-level">1</span></div>
+                <div class="problem-counter">Problem <span id="current-problem">1</span> / <span id="total-problems">5</span></div>
+            </div>
+            <div class="top-bar-center">
+                <div class="score-display"><span class="coin-icon">🪙</span> <span id="score">0</span> pts</div>
+                <div class="streak-display"><span class="fire-icon">🔥</span> <span id="streak">0</span> streak</div>
+            </div>
+            <div class="top-bar-right">
+                <button id="home-btn" class="btn btn-icon" title="Back to menu">🏠</button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="shop-scene">
+            <div id="solution-display" class="solution-display" style="display:none;"></div>
+            <div id="left-panel">
+                <!-- SHOPKEEPER -->
+                <div id="shopkeeper-area">
+                    <div class="monster-body" id="game-monster">
+                        <div class="monster-eye left-eye"><div class="pupil"></div></div>
+                        <div class="monster-eye right-eye"><div class="pupil"></div></div>
+                        <div class="monster-mouth happy"></div>
+                        <div class="monster-horn left-horn"></div>
+                        <div class="monster-horn right-horn"></div>
+                        <div class="monster-arm left-arm"></div>
+                        <div class="monster-arm right-arm"></div>
+                    </div>
+                    <div class="speech-bubble" id="monster-speech">
+                        <p id="speech-text">Welcome to my shop!</p>
+                    </div>
+                </div>
+
+                <!-- QUESTION -->
+                <div class="question-card" id="question-card">
+                    <div class="question-header">
+                        <span class="question-icon">📝</span>
+                        <span class="question-label">Question</span>
+                    </div>
+                    <p class="question-text" id="question-text"></p>
+                </div>
+            </div>
+
+            <!-- PRODUCT -->
+            <div id="product-area">
+                <div class="product-card" id="product-card">
+                    <div class="product-emoji" id="product-emoji">🧸</div>
+                    <div class="price-tag" id="price-tag">
+                        <span class="price-coin">🪙</span>
+                        <span class="price-value" id="price-value">40</span>
+                        <span class="price-label">coins</span>
+                    </div>
+                    <div class="discount-badge" id="discount-badge">
+                        <span id="discount-text">20% OFF</span>
+                    </div>
+                    <div class="discounted-price-tag" id="discounted-price-tag" style="display:none;">
+                        <span id="discounted-price-text">Discounted price: 30 coins</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO PANEL -->
+            <div id="info-panel">
+                <div class="calculation-breakdown" id="calc-breakdown">
+                    <h3>📝 Your Work</h3>
+                    <div class="calc-step" id="calc-step-1">
+                        <span class="calc-label">Full Price:</span>
+                        <span class="calc-value" id="calc-full-price">?</span>
+                    </div>
+                    <div class="calc-step" id="calc-step-2">
+                        <span class="calc-label">Discount:</span>
+                        <span class="calc-value" id="calc-discount">?</span>
+                    </div>
+                    <div class="calc-step" id="calc-step-3">
+                        <span class="calc-label">Final Price:</span>
+                        <span class="calc-value" id="calc-final">?</span>
+                    </div>
+                </div>
+
+                <!-- PROGRESSIVE HINTS BOX -->
+                <div class="hints-box" id="hints-box">
+                    <div class="hints-header">
+                        <span>💡 Need Help?</span>
+                        <span class="hint-attempts" id="hint-attempts-text">Try answering first!</span>
+                    </div>
+                    <div class="hints-content" id="hints-content"></div>
+                    <button id="show-hint-btn" class="btn btn-hint-progressive" disabled>
+                        <span class="hint-lock-icon">🔒</span> <span id="hint-btn-label">Answer first to unlock hints</span>
+                    </button>
+                    <button id="show-answer-btn" class="btn btn-show-answer" style="display:none;">
+                        📖 Show Full Solution Step-by-Step
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- ======== STRETCHABLE DUAL NUMBER LINE ======== -->
+        <section id="numberline-area">
+            <div class="numberline-wrapper">
+                <!-- Instruction -->
+                <div class="nl-instruction" id="nl-instruction">
+                    👆 Drag the slider on the bottom line to set the price. The percentage line above will stretch to match!
+                </div>
+
+                <div class="dual-numberline-container" id="dual-nl-container">
+                    <!-- PERCENTAGE LINE (top) – stretchable -->
+                    <div class="nl-row nl-row-percent">
+                        <div class="nl-row-label"><span class="nl-row-icon nl-icon-pct">%</span></div>
+                        <div class="nl-percent-track-area">
+                            <div class="nl-percent-stretch" id="pct-stretch">
+                                <div class="nl-track nl-track-pct" id="pct-track">
+                                    <div class="nl-fill nl-fill-discount-pct" id="pct-fill-discount"></div>
+                                </div>
+                                <div class="nl-ticks-pct" id="pct-ticks">
+                                    <!-- 0% to 100% ticks generated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vertical connector lines -->
+                    <div class="nl-connector-area" id="nl-connector-area">
+                        <!-- connecting dashed lines drawn by JS -->
+                    </div>
+
+                    <!-- VALUE LINE (bottom) – fixed full width -->
+                    <div class="nl-row nl-row-value">
+                        <div class="nl-row-label"><span class="nl-row-icon nl-icon-val">🪙</span></div>
+                        <div class="nl-value-track-area" id="val-track-area">
+                            <div class="nl-track nl-track-val" id="val-track">
+                                <div class="nl-fill nl-fill-full" id="val-fill-full"></div>
+                                <div class="nl-fill nl-fill-discount-val" id="val-fill-discount"></div>
+                            </div>
+                            <div class="nl-ticks-val" id="val-ticks">
+                                <!-- 0-50 ticks generated by JS -->
+                            </div>
+                            <!-- SINGLE draggable slider -->
+                            <div class="nl-slider" id="nl-slider" tabindex="0" role="slider"
+                                 aria-label="Price slider" aria-valuemin="0" aria-valuemax="50">
+                                <div class="slider-head" id="slider-head">
+                                    <span class="slider-val" id="slider-val">0</span>
+                                </div>
+                                <div class="slider-stem"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Readout showing what % corresponds to what value -->
+                <div class="nl-readout" id="nl-readout">
+                    <span id="readout-text">Drag the slider to explore!</span>
+                </div>
+            </div>
+
+            <!-- ANSWER AREA -->
+            <div class="answer-area" id="answer-area">
+                <div class="answer-prompt" id="answer-prompt">What is the final price?</div>
+                <div class="answer-input-group">
+                    <span class="answer-coin">🪙</span>
+                    <input type="number" id="answer-input" class="answer-input" placeholder="?" min="0" max="500" step="1" autocomplete="off">
+                    <button id="submit-answer-btn" class="btn btn-submit">Check ✓</button>
+                </div>
+                <div class="answer-feedback-inline" id="answer-feedback-inline"></div>
+            </div>
+        </section>
+
+        <!-- FEEDBACK OVERLAY -->
+        <div class="feedback-overlay" id="feedback-overlay">
+            <div class="feedback-card" id="feedback-card">
+                <div class="feedback-icon" id="feedback-icon">🎉</div>
+                <h2 class="feedback-title" id="feedback-title">Fantastic!</h2>
+                <p class="feedback-message" id="feedback-message">You got it right!</p>
+                <div class="feedback-detail" id="feedback-detail"></div>
+                <button id="feedback-next-btn" class="btn btn-primary">Next Problem →</button>
+            </div>
+        </div>
+
+        <!-- STEP-BY-STEP SOLUTION OVERLAY -->
+        <div class="solution-overlay" id="solution-overlay">
+            <div class="solution-card" id="solution-card">
+                <div class="solution-header">
+                    <span class="solution-icon">📖</span>
+                    <h2>Step-by-Step Solution</h2>
+                </div>
+                <div class="solution-steps" id="solution-steps"></div>
+                <div class="solution-footer">
+                    <button id="solution-got-it-btn" class="btn btn-primary">I understand! Next →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== RESULTS SCREEN ======== -->
+    <div id="results-screen" class="screen">
+        <div class="results-content">
+            <div class="results-monster">
+                <div class="monster-body" id="results-monster">
+                    <div class="monster-eye left-eye"><div class="pupil"></div></div>
+                    <div class="monster-eye right-eye"><div class="pupil"></div></div>
+                    <div class="monster-mouth happy"></div>
+                    <div class="monster-horn left-horn"></div>
+                    <div class="monster-horn right-horn"></div>
+                </div>
+            </div>
+            <h1 class="results-title" id="results-title">Great Work!</h1>
+            <div class="results-stats">
+                <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-value" id="result-correct">0</div><div class="stat-label">Correct</div></div>
+                <div class="stat-card"><div class="stat-icon">🪙</div><div class="stat-value" id="result-score">0</div><div class="stat-label">Points</div></div>
+                <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-value" id="result-streak">0</div><div class="stat-label">Best Streak</div></div>
+            </div>
+            <div class="results-stars" id="results-stars"></div>
+            <div class="results-buttons">
+                <button id="replay-btn" class="btn btn-primary btn-large">Play Again 🔄</button>
+                <button id="next-level-btn" class="btn btn-secondary btn-large">Next Level ➡️</button>
+                <button id="menu-btn" class="btn btn-ghost">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
