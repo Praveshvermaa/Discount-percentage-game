@@ -128,16 +128,16 @@
                     <div class="mrp-badge" id="mrp-badge">
                         <span id="mrp-text">MRP: 40 🪙</span>
                     </div>
-                    
+
                     <!-- Discount Badge (top-right) -->
                     <div class="discount-badge" id="discount-badge">
                         <span id="discount-text">20% OFF</span>
                     </div>
-                    
+
                     <!-- Product Info -->
                     <div class="product-emoji" id="product-emoji">🧸</div>
                     <div class="product-name" id="product-name">Teddy Bear</div>
-                    
+
                     <!-- Question Text -->
                     <div class="card-question" id="card-question">
                         <span id="card-question-text">What is the final price?</span>
@@ -184,8 +184,11 @@
         <!-- ======== STRETCHABLE DUAL NUMBER LINE ======== -->
         <section id="numberline-area">
             <div class="numberline-wrapper">
-    
+
+
                 <div class="dual-numberline-container" id="dual-nl-container">
+                    <!-- <div id="percentage-marker-instruction" class="slider-instruction">📍 Use marker to measure percentage</div> -->
+                    <!-- <br> -->
                     <!-- PERCENTAGE LINE (top) – stretchable -->
                     <div class="nl-row nl-row-percent">
                         <div class="nl-row-label"><span class="nl-row-icon nl-icon-pct">%</span></div>
@@ -207,7 +210,8 @@
 
                                 <!-- SECOND DRAGGABLE MARKER (0% anchor) -->
                                 <div class="pct-marker" id="pct-marker-left">
-                                    <div class="pct-marker-label pct-marker-label-left" id="pct-marker-label-left">0%</div>
+                                    <div class="pct-marker-label pct-marker-label-left" id="pct-marker-label-left">0%
+                                    </div>
                                     <div class="pct-marker-line pct-marker-line-left"></div>
                                     <div class="pct-marker-handle pct-marker-handle-left"></div>
                                 </div>
@@ -242,7 +246,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="slider-instruction">🎯 Drag the yellow dot to set the FULL price</div>
                 </div>
+
             </div>
         </section>
 
@@ -253,10 +259,29 @@
                 <div class="answer-input-group">
                     <span class="answer-coin">🪙</span>
                     <input type="number" id="answer-input" class="answer-input" placeholder="?" min="0" max="500"
-                        step="1" autocomplete="off">
+                        step="1" autocomplete="off" readonly>
                     <button id="submit-answer-btn" class="btn btn-submit">Check ✓</button>
                 </div>
                 <div class="answer-feedback-inline" id="answer-feedback-inline"></div>
+
+                <!-- Custom Calculator Keypad -->
+                <div id="keypad-overlay" class="keypad-overlay">
+                    <div class="keypad-grid">
+                        <button class="keypad-btn" data-val="1">1</button>
+                        <button class="keypad-btn" data-val="2">2</button>
+                        <button class="keypad-btn" data-val="3">3</button>
+                        <button class="keypad-btn" data-val="4">4</button>
+                        <button class="keypad-btn" data-val="5">5</button>
+                        <button class="keypad-btn" data-val="6">6</button>
+                        <button class="keypad-btn" data-val="7">7</button>
+                        <button class="keypad-btn" data-val="8">8</button>
+                        <button class="keypad-btn" data-val="9">9</button>
+                        <button class="keypad-btn keypad-func" data-val="clear">C</button>
+                        <button class="keypad-btn" data-val="0">0</button>
+                        <button class="keypad-btn keypad-func" data-val="backspace">⌫</button>
+                    </div>
+                    <button id="keypad-done-btn" class="btn btn-keypad-done">Done</button>
+                </div>
             </div>
         </section>
 

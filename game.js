@@ -433,13 +433,13 @@
     function setMarkerLeftPercent(pct) {
         state.markerLeftPercent = pct;
         pctMarkerLeft.style.left = pct + '%';
-        
+
         pctMarkerFillLeft.style.left = '0%';
         pctMarkerFillLeft.style.width = pct + '%';
-        
+
         updateMarkerLeftLabel();
     }
-    
+
     function updateMarkerLeftLabel() {
         const pct = state.markerLeftPercent;
         pctMarkerLabelLeft.innerHTML = `${pct}%`;
@@ -637,7 +637,7 @@
 
         // Set MRP Badge (always show original price)
         mrpText.textContent = 'MRP: ' + p.price + ' 🪙';
-        
+
         // Product card - Discount badge
         if (p.type === 'reverse') {
             discountText.textContent = p.discountPct + '% OFF';
@@ -1314,10 +1314,69 @@
         });
     });
 
+    function initKeypad() {
+        const keypadOverlay = document.getElementById('keypad-overlay');
+        const answerInput = document.getElementById('answer-input');
+        const keypadBtns = document.querySelectorAll('.keypad-btn');
+        const doneBtn = document.getElementById('keypad-done-btn');
+
+        if (!keypadOverlay || !answerInput) return;
+
+        // Open keypad on input click or focus
+        const openKeypad = (e) => {
+            e.stopPropagation();
+            keypadOverlay.classList.add('active');
+        };
+
+        answerInput.addEventListener('click', openKeypad);
+        answerInput.addEventListener('focus', openKeypad);
+
+        // Close on Done button
+        doneBtn.addEventListener('click', () => {
+            keypadOverlay.classList.remove('active');
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!keypadOverlay.contains(e.target) && e.target !== answerInput) {
+                keypadOverlay.classList.remove('active');
+            }
+        });
+
+        // Handle button clicks
+        keypadBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.getAttribute('data-val');
+                let currentVal = answerInput.value;
+
+                if (val === 'clear') {
+                    answerInput.value = '';
+                } else if (val === 'backspace') {
+                    answerInput.value = currentVal.slice(0, -1);
+                } else {
+                    // Prevent leading zero if value is already empty
+                    if (currentVal === '' && val === '0') return;
+
+                    // Append value
+                    const newVal = currentVal + val;
+
+                    // Only update if within range
+                    if (parseInt(newVal) <= 500 || newVal === '') {
+                        answerInput.value = newVal;
+                    }
+                }
+
+                // Trigger input event for any other logic listening
+                answerInput.dispatchEvent(new Event('input'));
+            });
+        });
+    }
+
     /* ---------- INIT ---------- */
     buildPctTicks();
     buildValTicks();
     initDrag();
     updateLevelBtns();
+    initKeypad();
 
 })();
