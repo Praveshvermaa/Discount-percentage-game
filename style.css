@@ -759,16 +759,16 @@ body {
     position: absolute;
     top: -10px;
     left: -10px;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(88, 28, 135, 0.3));
-    border: 2px solid rgba(168, 85, 247, 0.4);
-    color: var(--primary-light);
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
     font-weight: 700;
-    font-size: .75rem;
-    padding: 6px 12px;
+    font-size: .8rem;
+    padding: 5px 12px;
     border-radius: var(--radius-md);
     transform: rotate(-8deg);
-    z-index: 1;
-    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.2);
+    animation: badgeBounce 2s ease-in-out infinite;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
 }
 
 .discount-badge {
@@ -784,6 +784,7 @@ body {
     transform: rotate(8deg);
     animation: badgeBounce 2s ease-in-out infinite;
     z-index: 2;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
 }
 
 .discounted-price-tag {
@@ -2834,6 +2835,7 @@ body {
 .marker-instruction.visible {
     display: flex;
 }
+
 /* HELP MODAL STYLES */
 .help-card {
     max-width: 550px;
@@ -2921,4 +2923,3 @@ body {
     align-items: center;
     margin-bottom: 25px;
 }
-
