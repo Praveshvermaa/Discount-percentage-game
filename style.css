@@ -1156,7 +1156,7 @@ body {
     gap: 8px;
     padding: 10px 10px 8px;
     overflow: hidden;
-    min-height: 0;
+    flex: 0 0 auto;
 }
 
 #shop-scene::before {
@@ -1284,21 +1284,31 @@ body {
 
 #numberline-area {
     position: static;
-    padding: 8px 10px calc(10px + env(safe-area-inset-bottom));
-    background: linear-gradient(180deg, rgba(26,16,40,.45), rgba(20,12,32,.96) 24%);
+    padding: 8px 10px;
+    background: linear-gradient(180deg, rgba(26,16,40,.45), rgba(20,12,32,.7) 40%);
     border-top: 1px solid rgba(255,255,255,.08);
-    box-shadow: 0 -12px 30px rgba(0,0,0,.28);
-    flex-shrink: 0;
-    margin-top: auto;
+    box-shadow: 0 -12px 30px rgba(0,0,0,.15);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .numberline-wrapper {
     max-width: none;
+    width: 100%;
+    margin: 0;
     padding: 10px;
     background: rgba(255,255,255,.04);
     border: 1px solid rgba(255,255,255,.08);
     border-radius: 24px;
     backdrop-filter: blur(14px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.dual-numberline-container {
+    margin: auto 0;
 }
 
 .nl-instruction {
@@ -1339,6 +1349,10 @@ body {
     height: 18px;
 }
 
+.nl-connector-area {
+    height: 36px;
+}
+
 .nl-value-track-area {
     height: 50px;
 }
@@ -1364,11 +1378,18 @@ body {
     padding: 4px 10px;
 }
 
+.answer-section {
+    padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(20,12,32,.96);
+    border-top: 1px solid rgba(255,255,255,.08);
+    flex-shrink: 0;
+}
+
 .answer-area {
     max-width: none;
-    margin: 8px 0 0;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,.08);
+    margin: 0;
+    padding-top: 0;
+    border-top: none;
     text-align: left;
 }
 
@@ -1518,6 +1539,7 @@ body {
         gap: 12px 16px;
         padding: 12px 20px 6px;
         overflow: hidden;
+        flex: 1;
     }
 
     .solution-display {
@@ -1554,10 +1576,18 @@ body {
 
     #numberline-area {
         position: static;
-        padding: 2px 20px 12px;
+        padding: 2px 20px 0;
         background: transparent;
         border-top: none;
         box-shadow: none;
+        flex: 0 0 auto;
+        display: block;
+    }
+
+    .answer-section {
+        padding: 0 20px 12px;
+        background: transparent;
+        border-top: none;
     }
 
     .numberline-wrapper {
@@ -1566,6 +1596,11 @@ body {
         border: none;
         border-radius: 0;
         backdrop-filter: none;
+        display: block;
+    }
+
+    .dual-numberline-container {
+        margin: 0;
     }
 
     .product-card {
