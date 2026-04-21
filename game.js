@@ -108,6 +108,7 @@
     const answerInput = $('#answer-input');
     const submitAnswerBtn = $('#submit-answer-btn');
     const answerFeedbackEl = $('#answer-feedback-inline');
+    const questionCard = $('#question-card');
 
     const feedbackOverlay = $('#feedback-overlay');
     const feedbackCard = $('#feedback-card');
@@ -161,6 +162,7 @@
         isDraggingMarkerLeft: false,
         attempts: 0,
         hintsRevealed: 0,
+        awaitingNext: false,
         unlockedLevels: [1, 2, 3, 4, 3, 4],
     };
 
@@ -300,10 +302,12 @@
     function clearConnectors() { connectorArea.innerHTML = ''; }
 
     function addConnector(valuePos, className) {
-        const leftPct = (valuePos / VAL_MAX) * 100;
+        const connectorRect = connectorArea.getBoundingClientRect();
+        const valueTrackRect = valTrackArea.getBoundingClientRect();
+        const leftPx = (valuePos / VAL_MAX) * valueTrackRect.width + (valueTrackRect.left - connectorRect.left);
         const line = document.createElement('div');
         line.className = 'nl-connector-line active ' + (className || '');
-        line.style.left = leftPct + '%';
+        line.style.left = leftPx + 'px';
         connectorArea.appendChild(line);
     }
 
@@ -324,7 +328,7 @@
         e.preventDefault();
         state.isDragging = true;
         document.body.style.cursor = 'grabbing';
-        slideSound.play();
+        slideSound?.play();
         applyPointer(e);
     }
 
@@ -334,7 +338,7 @@
         e.stopPropagation();
         state.isDraggingMarker = true;
         document.body.style.cursor = 'grabbing';
-        slideSound.play();
+        slideSound?.play();
         applyMarkerPointer(e);
     }
 
@@ -344,7 +348,7 @@
         e.stopPropagation();
         state.isDraggingMarkerLeft = true;
         document.body.style.cursor = 'grabbing';
-        slideSound.play();
+        slideSound?.play();
         applyMarkerLeftPointer(e);
     }
 
@@ -618,6 +622,8 @@
         state.problem = p;
         state.attempts = 0;
         state.hintsRevealed = 0;
+        state.awaitingNext = false;
+        questionCard.classList.remove('has-error');
 
         currentProblemEl.textContent = state.problemIndex + 1;
         productEmoji.textContent = p.product.emoji;
@@ -644,7 +650,7 @@
         }
 
         // Keep the on-screen question concise.
-        questionText.textContent = p.answerPromptText;
+        questionText.innerHTML = buildQuestionMarkup(p);
 
         // Answer prompt
         answerPrompt.textContent = p.answerPromptText;
@@ -679,10 +685,13 @@
 
         // Answer area visible (let them try!)
         answerArea.style.display = 'block';
+        moveFeedbackToAnswerArea();
         answerInput.value = '';
         answerInput.classList.remove('correct', 'wrong');
         answerFeedbackEl.textContent = '';
         answerFeedbackEl.className = 'answer-feedback-inline';
+        answerFeedbackEl.style.color = '';
+        submitAnswerBtn.textContent = 'Check';
 
         // Reset hints
         hintsContent.innerHTML = '';
@@ -701,6 +710,11 @@
        ANSWER CHECKING — Progressive hints
        ============================================================ */
     function checkAnswer() {
+        if (state.awaitingNext) {
+            nextProblem();
+            return;
+        }
+
         const p = state.problem;
         const val = parseInt(answerInput.value, 10);
         if (isNaN(val)) {
@@ -720,7 +734,10 @@
 
     function onCorrect(p) {
         successSound.play();
+        moveFeedbackToAnswerArea();
+        answerInput.classList.remove('wrong');
         answerInput.classList.add('correct');
+        questionCard.classList.remove('has-error');
 
         const pts = state.attempts === 1 ? 100 : state.attempts === 2 ? 60 : 30;
         state.score += pts;
@@ -752,21 +769,26 @@
         launchConfetti();
 
         answerFeedbackEl.textContent = '✅ Correct! +' + pts + ' points';
+        state.awaitingNext = true;
+        submitAnswerBtn.textContent = 'Next Question';
         answerFeedbackEl.className = 'answer-feedback-inline';
+        answerFeedbackEl.textContent = 'Correct! Tap Next Question to continue.';
         answerFeedbackEl.style.color = '#4ade80';
-
-        setTimeout(() => showFeedback(true, p, pts), 1000);
     }
 
     function onWrong(p) {
         errorSound.play();
+        moveFeedbackToAnswerArea();
+        answerInput.classList.remove('correct');
         answerInput.classList.add('wrong');
-        setTimeout(() => answerInput.classList.remove('wrong'), 400);
+        questionCard.classList.remove('has-error');
         state.streak = 0;
         refreshScore();
 
         answerFeedbackEl.textContent = `❌ Not quite. Try again! (Attempt ${state.attempts})`;
         answerFeedbackEl.className = 'answer-feedback-inline wrong-msg';
+        answerFeedbackEl.textContent = `Not quite. Try again. Attempt ${state.attempts}.`;
+        answerFeedbackEl.style.color = '';
 
         // Show visual guidance on number lines
         showWrongAnswerGuidance(p);
@@ -847,6 +869,84 @@
             } else {
                 calcStepEls[2].val.textContent = p.finalPrice + ' coins';
             }
+        }
+    }
+
+    function buildQuestionMarkup(p) {
+        const priceLabel = p.type === 'reverse' ? 'Sale Price' : 'Price';
+        const priceValue = p.type === 'reverse' ? p.finalPrice : p.price;
+        const discountLabel = p.type === 'find_percent' ? 'Discount' : 'Sale';
+        const discountValue = p.type === 'find_percent'
+            ? `${p.discountAmt} coins OFF`
+            : `${p.discountPct}% OFF`;
+
+        let actionText = 'Find the final price';
+        if (p.type === 'reverse') actionText = 'Find the original price';
+        if (p.type === 'find_percent') actionText = 'Find the discount percent';
+        if (p.type === 'remaining') actionText = 'Find how many coins you pay';
+
+        return `
+            <span class="question-line">
+                <span class="question-prefix">${p.product.emoji} ${priceLabel}:</span>
+                <span class="question-value question-value-coins">${priceValue} coins</span>
+            </span>
+            <span class="question-line">
+                <span class="question-prefix">🔥 Discount:</span>
+                <span class="question-value question-value-discount">${discountValue}</span>
+            </span>
+            <span class="question-line question-line-action">
+                <span class="question-prefix">👉</span>
+                <span class="question-action">${actionText}</span>
+            </span>
+        `;
+    }
+
+    function buildQuestionMarkup(p) {
+        const priceLabel = p.type === 'reverse' ? 'Sale Price' : 'Price';
+        const priceValue = p.type === 'reverse' ? p.finalPrice : p.price;
+        const discountLabel = p.type === 'find_percent' ? 'Discount' : 'Sale';
+        const discountValue = p.type === 'find_percent'
+            ? `${p.discountAmt} coins OFF`
+            : `${p.discountPct}% OFF`;
+
+        let actionText = 'Find the final price';
+        if (p.type === 'reverse') actionText = 'Find the original price';
+        if (p.type === 'find_percent') actionText = 'Find the discount percent';
+        if (p.type === 'remaining') actionText = 'Find how many coins you pay';
+
+        return `
+            <span class="question-line">
+                <span class="question-prefix">${p.product.emoji} ${p.product.name}</span>
+            </span>
+            <span class="question-line">
+                <span class="question-prefix">${priceLabel}:</span>
+                <span class="question-value question-value-coins">${priceValue} coins</span>
+            </span>
+            <span class="question-line">
+                <span class="question-prefix">${discountLabel}:</span>
+                <span class="question-value question-value-discount">${discountValue}</span>
+            </span>
+            <span class="question-line question-line-action">
+                <span class="question-prefix">Goal:</span>
+                <span class="question-action">${actionText}</span>
+            </span>
+        `;
+    }
+
+    function revealAllCalcSteps(p) {
+        calcStepEls.forEach(s => s.el.classList.add('revealed'));
+        if (p.type === 'find_percent') {
+            calcStepEls[0].val.textContent = p.price + ' coins';
+            calcStepEls[1].val.textContent = p.discountAmt + ' coins';
+            calcStepEls[2].val.textContent = p.discountPct + '%';
+        } else if (p.type === 'reverse') {
+            calcStepEls[0].val.textContent = p.finalPrice + ' coins';
+            calcStepEls[1].val.textContent = p.discountPct + '% = ' + p.discountAmt + ' coins';
+            calcStepEls[2].val.textContent = p.price + ' coins';
+        } else {
+            calcStepEls[0].val.textContent = p.price + ' coins';
+            calcStepEls[1].val.textContent = p.discountPct + '% = ' + p.discountAmt + ' coins';
+            calcStepEls[2].val.textContent = p.finalPrice + ' coins';
         }
     }
 
@@ -969,12 +1069,14 @@
     function showFeedback(correct, p, pts) {
         feedbackOverlay.classList.add('active');
         feedbackCard.className = 'feedback-card ' + (correct ? 'correct' : 'wrong');
+        const nextLabel = state.problemIndex < PROBLEMS_PER_LEVEL - 1 ? 'Next Problem' : 'See Results';
 
         if (correct) {
             feedbackIcon.textContent = pick(['🎉', '🌟', '🏆', '💯', '🎊']);
             feedbackTitle.textContent = pick(SUCCESS_MESSAGES);
             feedbackMessage.textContent = '+' + pts + ' points!  Streak: ' + state.streak + ' 🔥';
             feedbackDetail.innerHTML = '';
+            feedbackMessage.textContent = '+' + pts + ' points! Tap "' + nextLabel + '" to continue.';
         } else {
             feedbackIcon.textContent = '📘';
             feedbackTitle.textContent = "Let's Review!";
@@ -983,6 +1085,18 @@
         }
         feedbackNextBtn.textContent = state.problemIndex < PROBLEMS_PER_LEVEL - 1
             ? 'Next Problem →' : 'See Results 🏆';
+    }
+
+    function moveFeedbackToQuestionCard() {
+        if (answerFeedbackEl.parentElement !== questionCard) {
+            questionCard.appendChild(answerFeedbackEl);
+        }
+    }
+
+    function moveFeedbackToAnswerArea() {
+        if (answerFeedbackEl.parentElement !== answerArea) {
+            answerArea.appendChild(answerFeedbackEl);
+        }
     }
 
     function buildBreakdownHTML(p) {
