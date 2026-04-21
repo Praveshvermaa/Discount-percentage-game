@@ -966,19 +966,14 @@
         // Step 1: Animate slider to full price after a delay
         setTimeout(() => {
             setSlider(p.price, true);
-            nlInstruction.textContent = 'First, set the slider to the full price shown on the product card.';
             setTimeout(() => {
                 // Step 2: Show discount visualization
                 showDiscountOnLines(p.price, p.discountPct);
                 addConnector(p.price, '');
-                nlInstruction.textContent = `Now you can see the ${p.discountPct}% discount region on the percentage line.`;
 
                 setTimeout(() => {
                     // Step 3: Show final price connection
                     addConnector(p.type === 'find_percent' ? p.discountAmt : p.finalPrice, 'connector-final');
-                    nlInstruction.textContent = p.type === 'find_percent'
-                        ? `The correct percentage is where ${p.discountAmt} coins lines up on the value line.`
-                        : `The final price is where the ${100 - p.discountPct}% mark connects to the value line.`;
 
                     // Update calculation breakdown with visual cues
                     setTimeout(() => {
@@ -1002,8 +997,6 @@
                                 } else {
                                     calcStepEls[2].val.textContent = p.finalPrice + ' coins';
                                 }
-
-                                nlInstruction.textContent = 'Use the number lines to visualize the discount calculation!';
                             }, 1500);
                         }, 1500);
                     }, 1000);
