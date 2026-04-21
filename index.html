@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="An interactive learning game for middle school students to master percentages, discounts, and price relationships using a stretchable percentage number line.">
+    <meta name="description"
+        content="An interactive learning game for middle school students to master percentages, discounts, and price relationships using a stretchable percentage number line.">
     <title>Discount Den – Learn Percentages & Discounts</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
     <!-- Audio elements for game sounds -->
@@ -15,6 +19,7 @@
     <audio id="success-sound" preload="auto" src="success.mp3"></audio>
     <audio id="error-sound" preload="auto" src="error.mp3"></audio>
 </head>
+
 <body>
     <!-- ======== SPLASH / START SCREEN ======== -->
     <div id="splash-screen" class="screen active">
@@ -34,8 +39,12 @@
 
             <div class="splash-monster-row">
                 <div class="monster-body" id="splash-monster">
-                    <div class="monster-eye left-eye"><div class="pupil"></div></div>
-                    <div class="monster-eye right-eye"><div class="pupil"></div></div>
+                    <div class="monster-eye left-eye">
+                        <div class="pupil"></div>
+                    </div>
+                    <div class="monster-eye right-eye">
+                        <div class="pupil"></div>
+                    </div>
                     <div class="monster-mouth happy"></div>
                     <div class="monster-horn left-horn"></div>
                     <div class="monster-horn right-horn"></div>
@@ -77,7 +86,8 @@
         <div id="top-bar" aria-hidden="true">
             <div class="top-bar-left">
                 <div class="level-badge">Level <span id="current-level">1</span></div>
-                <div class="problem-counter">Problem <span id="current-problem">1</span> / <span id="total-problems">5</span></div>
+                <div class="problem-counter">Problem <span id="current-problem">1</span> / <span
+                        id="total-problems">5</span></div>
             </div>
             <div class="top-bar-center">
                 <div class="score-display"><span class="coin-icon">🪙</span> <span id="score">0</span> pts</div>
@@ -90,10 +100,14 @@
             <div id="solution-display" class="solution-display" style="display:none;"></div>
             <div id="left-panel">
                 <!-- SHOPKEEPER -->
-                <div id="shopkeeper-area">
+                <div id="shopkeeper-area" style="display:none;">
                     <div class="monster-body" id="game-monster">
-                        <div class="monster-eye left-eye"><div class="pupil"></div></div>
-                        <div class="monster-eye right-eye"><div class="pupil"></div></div>
+                        <div class="monster-eye left-eye">
+                            <div class="pupil"></div>
+                        </div>
+                        <div class="monster-eye right-eye">
+                            <div class="pupil"></div>
+                        </div>
                         <div class="monster-mouth happy"></div>
                         <div class="monster-horn left-horn"></div>
                         <div class="monster-horn right-horn"></div>
@@ -105,33 +119,28 @@
                     </div>
                 </div>
 
-                <!-- QUESTION -->
-                <div class="question-card" id="question-card">
-                    <div class="question-header">
-                        <span class="question-icon">📝</span>
-                        <span class="question-label">Pricing Challenge</span>
-                    </div>
-                    <h2 class="question-title" id="question-title">Solve the sale question.</h2>
-                    <p class="question-helper" id="question-helper">Read the product card, then use the number line if you need help.</p>
-                    <p class="question-text" id="question-text"></p>
-                </div>
             </div>
 
             <!-- PRODUCT -->
             <div id="product-area">
                 <div class="product-card" id="product-card">
-                    <div class="product-emoji" id="product-emoji">🧸</div>
-                    <div class="product-name" id="product-name">Teddy Bear</div>
-                    <div class="price-tag" id="price-tag">
-                        <span class="price-coin">🪙</span>
-                        <span class="price-value" id="price-value">40</span>
-                        <span class="price-label">coins</span>
+                    <!-- MRP Badge (top-left) -->
+                    <div class="mrp-badge" id="mrp-badge">
+                        <span id="mrp-text">MRP: 40 🪙</span>
                     </div>
+                    
+                    <!-- Discount Badge (top-right) -->
                     <div class="discount-badge" id="discount-badge">
                         <span id="discount-text">20% OFF</span>
                     </div>
-                    <div class="discounted-price-tag" id="discounted-price-tag" style="display:none;">
-                        <span id="discounted-price-text">Discounted price: 30 coins</span>
+                    
+                    <!-- Product Info -->
+                    <div class="product-emoji" id="product-emoji">🧸</div>
+                    <div class="product-name" id="product-name">Teddy Bear</div>
+                    
+                    <!-- Question Text -->
+                    <div class="card-question" id="card-question">
+                        <span id="card-question-text">What is the final price?</span>
                     </div>
                 </div>
             </div>
@@ -162,7 +171,8 @@
                     </div>
                     <div class="hints-content" id="hints-content"></div>
                     <button id="show-hint-btn" class="btn btn-hint-progressive" disabled>
-                        <span class="hint-lock-icon">🔒</span> <span id="hint-btn-label">Answer first to unlock hints</span>
+                        <span class="hint-lock-icon">🔒</span> <span id="hint-btn-label">Answer first to unlock
+                            hints</span>
                     </button>
                     <button id="show-answer-btn" class="btn btn-show-answer" style="display:none;">
                         📖 Show Full Solution Step-by-Step
@@ -174,11 +184,7 @@
         <!-- ======== STRETCHABLE DUAL NUMBER LINE ======== -->
         <section id="numberline-area">
             <div class="numberline-wrapper">
-                <!-- Instruction -->
-                <div class="nl-instruction" id="nl-instruction">
-                    👆 Drag the slider on the bottom line to set the price. The percentage line above will stretch to match!
-                </div>
-
+    
                 <div class="dual-numberline-container" id="dual-nl-container">
                     <!-- PERCENTAGE LINE (top) – stretchable -->
                     <div class="nl-row nl-row-percent">
@@ -201,7 +207,8 @@
 
                                 <!-- SECOND DRAGGABLE MARKER (0% anchor) -->
                                 <div class="pct-marker" id="pct-marker-left">
-                                    <div class="pct-marker-label pct-marker-label-left" id="pct-marker-label-left">0% &rarr; 0</div>
+                                    <div class="pct-marker-label pct-marker-label-left" id="pct-marker-label-left">0%
+                                        &rarr; 0</div>
                                     <div class="pct-marker-line pct-marker-line-left"></div>
                                     <div class="pct-marker-handle pct-marker-handle-left"></div>
                                 </div>
@@ -227,8 +234,8 @@
                                 <!-- 0-50 ticks generated by JS -->
                             </div>
                             <!-- SINGLE draggable slider -->
-                            <div class="nl-slider" id="nl-slider" tabindex="0" role="slider"
-                                 aria-label="Price slider" aria-valuemin="0" aria-valuemax="50">
+                            <div class="nl-slider" id="nl-slider" tabindex="0" role="slider" aria-label="Price slider"
+                                aria-valuemin="0" aria-valuemax="50">
                                 <div class="slider-head" id="slider-head">
                                     <span class="slider-val" id="slider-val">0</span>
                                 </div>
@@ -238,22 +245,18 @@
                     </div>
                 </div>
 
-                <!-- Readout showing what % corresponds to what value -->
-                <div class="nl-readout" id="nl-readout">
-                    <span id="readout-text">Drag the slider to explore!</span>
-                </div>
-            </div>
 
-            <!-- ANSWER AREA -->
-            <div class="answer-area" id="answer-area">
-                <div class="answer-prompt" id="answer-prompt">What is the final price?</div>
-                <div class="answer-input-group">
-                    <span class="answer-coin">🪙</span>
-                    <input type="number" id="answer-input" class="answer-input" placeholder="?" min="0" max="500" step="1" autocomplete="off">
-                    <button id="submit-answer-btn" class="btn btn-submit">Check ✓</button>
+                <!-- ANSWER AREA -->
+                <div class="answer-area" id="answer-area">
+                    <div class="answer-prompt" id="answer-prompt">What is the final price?</div>
+                    <div class="answer-input-group">
+                        <span class="answer-coin">🪙</span>
+                        <input type="number" id="answer-input" class="answer-input" placeholder="?" min="0" max="500"
+                            step="1" autocomplete="off">
+                        <button id="submit-answer-btn" class="btn btn-submit">Check ✓</button>
+                    </div>
+                    <div class="answer-feedback-inline" id="answer-feedback-inline"></div>
                 </div>
-                <div class="answer-feedback-inline" id="answer-feedback-inline"></div>
-            </div>
         </section>
 
         <!-- FEEDBACK OVERLAY -->
@@ -288,8 +291,12 @@
             <div class="results-badge">Results</div>
             <div class="results-monster">
                 <div class="monster-body" id="results-monster">
-                    <div class="monster-eye left-eye"><div class="pupil"></div></div>
-                    <div class="monster-eye right-eye"><div class="pupil"></div></div>
+                    <div class="monster-eye left-eye">
+                        <div class="pupil"></div>
+                    </div>
+                    <div class="monster-eye right-eye">
+                        <div class="pupil"></div>
+                    </div>
                     <div class="monster-mouth happy"></div>
                     <div class="monster-horn left-horn"></div>
                     <div class="monster-horn right-horn"></div>
@@ -297,9 +304,21 @@
             </div>
             <h1 class="results-title" id="results-title">Great Work!</h1>
             <div class="results-stats">
-                <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-value" id="result-correct">0</div><div class="stat-label">Correct</div></div>
-                <div class="stat-card"><div class="stat-icon">🪙</div><div class="stat-value" id="result-score">0</div><div class="stat-label">Points</div></div>
-                <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-value" id="result-streak">0</div><div class="stat-label">Best Streak</div></div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="result-correct">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🪙</div>
+                    <div class="stat-value" id="result-score">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value" id="result-streak">0</div>
+                    <div class="stat-label">Best Streak</div>
+                </div>
             </div>
             <div class="results-stars" id="results-stars"></div>
             <div class="results-buttons">
@@ -312,4 +331,5 @@
 
     <script src="game.js"></script>
 </body>
+
 </html>

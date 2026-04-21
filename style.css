@@ -347,52 +347,71 @@ body {
 /* PRODUCT AREA */
 #product-area {
     grid-row: 2;
-    grid-column: 2;
+    grid-column: 1 / -1;
     display: flex;
     justify-content: center;
+    align-items: start;
     z-index: 2;
 }
 .product-card {
     background: var(--bg-card); backdrop-filter: blur(12px);
     border: 2px solid var(--glass-border); border-radius: var(--radius-xl);
-    padding: 12px 30px; text-align: center; position: relative;
+    padding: 20px 30px; text-align: center; position: relative;
     transition: var(--transition); box-shadow: var(--shadow-md);
     justify-self: center;
     align-self: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 }
 .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 .product-card.celebrate { border-color: var(--success); box-shadow: 0 0 40px rgba(34,197,94,.4); animation: popIn .4s ease-out; }
 .product-emoji { font-size: 3rem; margin-bottom: 4px; animation: float 3s ease-in-out infinite; }
 .product-name {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     font-size: 1rem;
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: .02em;
 }
 .price-tag {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
-    border-radius: var(--radius-md); padding: 6px 18px;
-    font-size: 1.3rem; font-weight: 700; color: #fff;
+    display: none;
 }
 .price-coin { font-size: 1.1rem; }
 .price-label { font-size: .65rem; font-weight: 500; opacity: .85; text-transform: uppercase; }
+
+/* MRP Badge (Top-Left) */
+.mrp-badge {
+    position: absolute; top: -10px; left: -10px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(88, 28, 135, 0.3));
+    border: 2px solid rgba(168, 85, 247, 0.4);
+    color: var(--primary-light); font-weight: 700; font-size: .75rem;
+    padding: 6px 12px; border-radius: var(--radius-md);
+    transform: rotate(-8deg); z-index: 1;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.2);
+}
+
 .discount-badge {
     position: absolute; top: -10px; right: -10px;
     background: linear-gradient(135deg, #ef4444, #dc2626);
     color: #fff; font-weight: 700; font-size: .8rem;
     padding: 5px 12px; border-radius: var(--radius-md);
-    transform: rotate(8deg); animation: badgeBounce 2s ease-in-out infinite;
+    transform: rotate(8deg); animation: badgeBounce 2s ease-in-out infinite; z-index: 2;
 }
 
 .discounted-price-tag {
-    position: absolute; top: -10px; left: -10px;
-    background: linear-gradient(135deg, #16a34a, #15803d);
-    color: #fff; font-weight: 700; font-size: .75rem;
-    padding: 5px 10px; border-radius: var(--radius-sm);
-    text-align: center; box-shadow: 0 2px 8px rgba(34,197,94,.3);
-    transform: rotate(-8deg); z-index: 2;
+    display: none !important;
+}
+
+/* Card Question Text */
+.card-question {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-top: 8px;
+    text-align: center;
 }
 
 /* QUESTION CARD */
@@ -1020,7 +1039,7 @@ body {
 }
 
 .question-card {
-    max-width: none;
+    display: none;
 }
 
 /* ============================================================
@@ -1038,8 +1057,7 @@ body {
         align-items: center;
         gap: 10px;
     }
-    .product-card,
-    .question-card {
+    .product-card {
         grid-column: auto;
         justify-self: auto;
         align-self: auto;
@@ -1051,8 +1069,7 @@ body {
 @media (max-width: 600px) {
     .title-text { font-size: 2rem; }
     .product-emoji { font-size: 2.5rem; }
-    .price-tag { font-size: 1.1rem; }
-    .question-text { font-size: .85rem; }
+    .card-question { font-size: .85rem; }
     .results-stats { flex-direction: column; align-items: center; gap: 12px; }
 }
 
@@ -1158,7 +1175,9 @@ body {
 
 #product-area {
     order: 1;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: start;
     width: 100%;
 }
 
@@ -1180,7 +1199,6 @@ body {
 }
 
 .product-card,
-.question-card,
 .calculation-breakdown,
 .hints-box,
 .solution-display {
@@ -1189,7 +1207,7 @@ body {
 }
 
 .product-card {
-    padding: 12px 12px 14px;
+    padding: 20px 16px 16px;
     box-shadow: 0 10px 28px rgba(0,0,0,.24);
 }
 
@@ -1200,35 +1218,32 @@ body {
 
 .product-name {
     font-size: .96rem;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
 }
 
 .price-tag {
-    width: 100%;
-    min-height: 48px;
-    border-radius: 18px;
-    font-size: 1.08rem;
+    display: none;
 }
 
-.discount-badge,
-.discounted-price-tag {
+.mrp-badge,
+.discount-badge {
     transform: none;
     top: 8px;
     font-size: .66rem;
 }
 
+.mrp-badge {
+    left: 8px;
+}
+
 .discount-badge {
-    right: 12px;
+    right: 8px;
 }
 
-.discounted-price-tag {
-    left: 12px;
-}
-
-.question-card {
-    padding: 12px;
-    background: linear-gradient(165deg, rgba(96,165,250,.16), rgba(168,85,247,.12));
-    position: relative;
+.card-question {
+    font-size: .92rem;
+    font-weight: 600;
+    margin-top: 6px;
 }
 
 .question-header,
@@ -1518,8 +1533,9 @@ body {
 
     #product-area {
         order: 0;
-        grid-column: 2;
+        grid-column: 1 / -1;
         grid-row: 2;
+        justify-self: center;
         align-self: start;
     }
 

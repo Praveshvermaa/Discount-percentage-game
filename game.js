@@ -65,10 +65,13 @@
     const productName = $('#product-name');
     const productEmoji = $('#product-emoji');
     const priceValue = $('#price-value');
+    const mrpBadge = $('#mrp-badge');
+    const mrpText = $('#mrp-text');
     const discountBadge = $('#discount-badge');
     const discountText = $('#discount-text');
     const discountedPriceTag = $('#discounted-price-tag');
     const discountedPriceText = $('#discounted-price-text');
+    const cardQuestionText = $('#card-question-text');
     const questionText = $('#question-text');
 
     const calcStepEls = [
@@ -100,8 +103,8 @@
     const sliderValEl = $('#slider-val');
 
     const connectorArea = $('#nl-connector-area');
-    const readoutText = $('#readout-text');
-    const nlInstruction = $('#nl-instruction');
+    const readoutText = null;
+    const nlInstruction = null;
 
     const answerArea = $('#answer-area');
     const answerPrompt = $('#answer-prompt');
@@ -251,12 +254,13 @@
         // Update readout
         if (value > 0) {
             updateReadout(value);
-        } else {
+        } else if (readoutText) {
             readoutText.textContent = 'Drag the slider to explore!';
         }
     }
 
     function updateReadout(value) {
+        if (!readoutText) return;
         const p = state.problem;
         if (!p) {
             readoutText.textContent = `Slider at ${value} → 100% = ${value} coins`;
@@ -629,34 +633,51 @@
         state.attempts = 0;
         state.hintsRevealed = 0;
         state.awaitingNext = false;
-        questionCard.classList.remove('has-error');
+        if (questionCard) {
+            questionCard.classList.remove('has-error');
+        }
 
         currentProblemEl.textContent = state.problemIndex + 1;
         productEmoji.textContent = p.product.emoji;
         productName.textContent = p.product.name;
 
-        // Product card
+        // Set MRP Badge (always show original price)
+        mrpText.textContent = 'MRP: ' + p.price + ' 🪙';
+        
+        // Product card - Discount badge
         if (p.type === 'reverse') {
-            priceValue.textContent = p.finalPrice;
             discountText.textContent = p.discountPct + '% OFF';
         } else if (p.type === 'find_percent') {
-            priceValue.textContent = p.price;
             discountText.textContent = '−' + p.discountAmt + ' coins';
         } else {
-            priceValue.textContent = p.price;
             discountText.textContent = p.discountPct + '% OFF';
         }
 
-        // Show discounted price tag only for level 3
-        if (state.level === 3) {
-            discountedPriceText.textContent = 'Discounted price';
-            discountedPriceTag.style.display = 'block';
+        // Set Card Question Text based on problem type
+        let cardQText = p.answerPromptText; // fallback to answer prompt
+        if (p.type === 'reverse') {
+            cardQText = 'What is the original price?';
+        } else if (p.type === 'find_percent') {
+            cardQText = 'What is the discount percentage?';
         } else {
-            discountedPriceTag.style.display = 'none';
+            cardQText = 'What is the final price?';
+        }
+        cardQuestionText.textContent = cardQText;
+
+        // Show discounted price tag only for level 3
+        if (discountedPriceTag) {
+            if (state.level === 3) {
+                if (discountedPriceText) discountedPriceText.textContent = 'Discounted price';
+                discountedPriceTag.style.display = 'block';
+            } else {
+                discountedPriceTag.style.display = 'none';
+            }
         }
 
-        // Keep the on-screen question concise.
-        questionText.innerHTML = buildQuestionMarkup(p);
+        // Keep the on-screen question concise (for backwards compatibility)
+        if (questionText && questionText.parentElement) {
+            questionText.innerHTML = buildQuestionMarkup(p);
+        }
 
         // Answer prompt
         answerPrompt.textContent = p.answerPromptText;
@@ -708,7 +729,7 @@
         hintAttemptsText.textContent = 'Try answering first!';
 
         // Instruction
-        nlInstruction.textContent = '👆 Drag the slider on the bottom line to set the price. The percentage line above will stretch to match!';
+        if (typeof nlInstruction !== 'undefined' && nlInstruction) nlInstruction.textContent = '👆 Drag the slider on the bottom line to set the price. The percentage line above will stretch to match!';
 
     }
 
@@ -743,7 +764,9 @@
         moveFeedbackToAnswerArea();
         answerInput.classList.remove('wrong');
         answerInput.classList.add('correct');
-        questionCard.classList.remove('has-error');
+        if (questionCard) {
+            questionCard.classList.remove('has-error');
+        }
 
         const pts = state.attempts === 1 ? 100 : state.attempts === 2 ? 60 : 30;
         state.score += pts;
@@ -758,7 +781,8 @@
         shopScene.classList.remove('wrong-answer');
         document.getElementById('product-area').style.display = '';
         document.getElementById('info-panel').style.display = '';
-        document.querySelector('.question-card').style.display = '';
+        const qCard = document.querySelector('.question-card');
+        if (qCard) qCard.style.display = '';
 
         // Show full visualization
         revealFullVisualization(p);
@@ -787,7 +811,9 @@
         moveFeedbackToAnswerArea();
         answerInput.classList.remove('correct');
         answerInput.classList.add('wrong');
-        questionCard.classList.remove('has-error');
+        if (questionCard) {
+            questionCard.classList.remove('has-error');
+        }
         state.streak = 0;
         refreshScore();
 
