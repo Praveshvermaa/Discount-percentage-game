@@ -111,7 +111,7 @@
     const answerInput = $('#answer-input');
     const submitAnswerBtn = $('#submit-answer-btn');
     const answerFeedbackEl = $('#answer-feedback-inline');
-    const questionCard = $('#question-card');
+    const questionCard = $('#product-card');
 
     const feedbackOverlay = $('#feedback-overlay');
     const feedbackCard = $('#feedback-card');
@@ -1198,7 +1198,7 @@
         shopScene.classList.remove('wrong-answer');
         document.getElementById('product-area').style.display = '';
         document.getElementById('info-panel').style.display = '';
-        document.querySelector('.question-card').style.display = '';
+        if (questionCard) questionCard.style.display = '';
         state.problemIndex++;
         if (state.problemIndex >= PROBLEMS_PER_LEVEL) { showResults(); return; }
         setupProblem();
