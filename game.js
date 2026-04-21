@@ -33,7 +33,7 @@
         { emoji: '🧩', name: 'Puzzle Set' },
     ];
 
-    const ENCOURAGEMENTS = [
+    const SUCCESS_MESSAGES = [
         'Fantastic! 🎉', 'Awesome work! 🌟', "You're a pro! 💪",
         'Nailed it! 🎯', 'Brilliant! ✨', 'Super smart! 🧠',
         'Amazing! 🏆', 'You rock! 🤩', 'Perfect! 💯',
@@ -49,27 +49,27 @@
     ];
 
     /* ---------- DOM refs ---------- */
-    const splashScreen     = $('#splash-screen');
-    const gameScreen       = $('#game-screen');
-    const resultsScreen    = $('#results-screen');
-    const startBtn         = $('#start-btn');
-    const homeBtn          = $('#home-btn');
-    const levelBtns        = $$('.btn-level');
+    const splashScreen = $('#splash-screen');
+    const gameScreen = $('#game-screen');
+    const resultsScreen = $('#results-screen');
+    const startBtn = $('#start-btn');
+    const homeBtn = $('#home-btn');
+    const levelBtns = $$('.btn-level');
 
-    const currentLevelEl   = $('#current-level');
+    const currentLevelEl = $('#current-level');
     const currentProblemEl = $('#current-problem');
-    const totalProblemsEl  = $('#total-problems');
-    const scoreEl          = $('#score');
-    const streakEl         = $('#streak');
+    const totalProblemsEl = $('#total-problems');
+    const scoreEl = $('#score');
+    const streakEl = $('#streak');
 
-    const speechText       = $('#speech-text');
-    const productEmoji     = $('#product-emoji');
-    const priceValue       = $('#price-value');
-    const discountBadge    = $('#discount-badge');
-    const discountText     = $('#discount-text');
+    const productName = $('#product-name');
+    const productEmoji = $('#product-emoji');
+    const priceValue = $('#price-value');
+    const discountBadge = $('#discount-badge');
+    const discountText = $('#discount-text');
     const discountedPriceTag = $('#discounted-price-tag');
     const discountedPriceText = $('#discounted-price-text');
-    const questionText     = $('#question-text');
+    const questionText = $('#question-text');
 
     const calcStepEls = [
         { el: $('#calc-step-1'), val: $('#calc-full-price') },
@@ -78,63 +78,70 @@
     ];
 
     // Number lines
-    const pctStretch       = $('#pct-stretch');
-    const pctTicks         = $('#pct-ticks');
-    const pctFillDiscount  = $('#pct-fill-discount');
-    const pctTrack         = $('#pct-track');
+    const pctStretch = $('#pct-stretch');
+    const pctTicks = $('#pct-ticks');
+    const pctFillDiscount = $('#pct-fill-discount');
+    const pctTrack = $('#pct-track');
 
-    const valTrackArea     = $('#val-track-area');
-    const valTicks         = $('#val-ticks');
-    const valFillFull      = $('#val-fill-full');
-    const valFillDiscount  = $('#val-fill-discount');
+    const pctMarker = $('#pct-marker');
+    const pctMarkerLabel = $('#pct-marker-label');
+    const pctMarkerFill = $('#pct-marker-fill');
 
-    const sliderEl         = $('#nl-slider');
-    const sliderValEl      = $('#slider-val');
+    const pctMarkerLeft = $('#pct-marker-left');
+    const pctMarkerLabelLeft = $('#pct-marker-label-left');
+    const pctMarkerFillLeft = $('#pct-marker-fill-left');
 
-    const connectorArea    = $('#nl-connector-area');
-    const readoutText      = $('#readout-text');
-    const nlInstruction    = $('#nl-instruction');
+    const valTrackArea = $('#val-track-area');
+    const valTicks = $('#val-ticks');
+    const valFillFull = $('#val-fill-full');
+    const valFillDiscount = $('#val-fill-discount');
 
-    const answerArea       = $('#answer-area');
-    const answerPrompt     = $('#answer-prompt');
-    const answerInput      = $('#answer-input');
-    const submitAnswerBtn  = $('#submit-answer-btn');
+    const sliderEl = $('#nl-slider');
+    const sliderValEl = $('#slider-val');
+
+    const connectorArea = $('#nl-connector-area');
+    const readoutText = $('#readout-text');
+    const nlInstruction = $('#nl-instruction');
+
+    const answerArea = $('#answer-area');
+    const answerPrompt = $('#answer-prompt');
+    const answerInput = $('#answer-input');
+    const submitAnswerBtn = $('#submit-answer-btn');
     const answerFeedbackEl = $('#answer-feedback-inline');
 
-    const feedbackOverlay  = $('#feedback-overlay');
-    const feedbackCard     = $('#feedback-card');
-    const feedbackIcon     = $('#feedback-icon');
-    const feedbackTitle    = $('#feedback-title');
-    const feedbackMessage  = $('#feedback-message');
-    const feedbackDetail   = $('#feedback-detail');
-    const feedbackNextBtn  = $('#feedback-next-btn');
+    const feedbackOverlay = $('#feedback-overlay');
+    const feedbackCard = $('#feedback-card');
+    const feedbackIcon = $('#feedback-icon');
+    const feedbackTitle = $('#feedback-title');
+    const feedbackMessage = $('#feedback-message');
+    const feedbackDetail = $('#feedback-detail');
+    const feedbackNextBtn = $('#feedback-next-btn');
 
-    const solutionOverlay  = $('#solution-overlay');
-    const solutionSteps    = $('#solution-steps');
+    const solutionOverlay = $('#solution-overlay');
+    const solutionSteps = $('#solution-steps');
     const solutionGotItBtn = $('#solution-got-it-btn');
-    const solutionDisplay  = $('#solution-display');
+    const solutionDisplay = $('#solution-display');
 
-    const hintsContent     = $('#hints-content');
-    const showHintBtn      = $('#show-hint-btn');
-    const showAnswerBtn    = $('#show-answer-btn');
-    const hintBtnLabel     = $('#hint-btn-label');
+    const hintsContent = $('#hints-content');
+    const showHintBtn = $('#show-hint-btn');
+    const showAnswerBtn = $('#show-answer-btn');
+    const hintBtnLabel = $('#hint-btn-label');
     const hintAttemptsText = $('#hint-attempts-text');
 
-    const resultCorrect    = $('#result-correct');
-    const resultScore      = $('#result-score');
-    const resultStreak     = $('#result-streak');
-    const resultsTitle     = $('#results-title');
-    const resultsStars     = $('#results-stars');
-    const replayBtn        = $('#replay-btn');
-    const nextLevelBtn     = $('#next-level-btn');
-    const menuBtn          = $('#menu-btn');
-    const gameMonster      = $('#game-monster');
+    const resultCorrect = $('#result-correct');
+    const resultScore = $('#result-score');
+    const resultStreak = $('#result-streak');
+    const resultsTitle = $('#results-title');
+    const resultsStars = $('#results-stars');
+    const replayBtn = $('#replay-btn');
+    const nextLevelBtn = $('#next-level-btn');
+    const menuBtn = $('#menu-btn');
 
     // Audio elements
-    const clickSound       = $('#click-sound');
-    const successSound     = $('#success-sound');
-    const errorSound       = $('#error-sound');
-    const slideSound       = $('#slide-sound');
+    const clickSound = $('#click-sound');
+    const successSound = $('#success-sound');
+    const errorSound = $('#error-sound');
+    const slideSound = $('#slide-sound');
 
     /* ---------- state ---------- */
     const state = {
@@ -148,9 +155,13 @@
         correctCount: 0,
         sliderValue: 0,     // 0–50 integer on the fixed value line
         isDragging: false,
+        markerPercent: 100,
+        isDraggingMarker: false,
+        markerLeftPercent: 0,
+        isDraggingMarkerLeft: false,
         attempts: 0,
         hintsRevealed: 0,
-        unlockedLevels: [1, 2],
+        unlockedLevels: [1, 2, 3, 4, 3, 4],
     };
 
     /* ============================================================
@@ -232,6 +243,9 @@
         // Show full-price fill on value line
         valFillFull.style.width = leftPct + '%';
 
+        updateMarkerLabel();
+        updateMarkerLeftLabel();
+
         // Update readout
         if (value > 0) {
             updateReadout(value);
@@ -294,11 +308,13 @@
     }
 
     /* ============================================================
-       DRAGGING (single slider on value line)
+       DRAGGING (single slider on value line & marker on percentage line)
        ============================================================ */
     function initDrag() {
         valTrackArea.addEventListener('pointerdown', onDown);
         sliderEl.addEventListener('pointerdown', onDown);
+        pctMarker.addEventListener('pointerdown', onMarkerDown);
+        pctMarkerLeft.addEventListener('pointerdown', onMarkerLeftDown);
         document.addEventListener('pointermove', onMove);
         document.addEventListener('pointerup', onUp);
     }
@@ -311,14 +327,50 @@
         slideSound.play();
         applyPointer(e);
     }
-    function onMove(e) {
-        if (!state.isDragging) return;
+
+    function onMarkerDown(e) {
+        if (valTrackArea.classList.contains('disabled')) return;
         e.preventDefault();
-        applyPointer(e);
+        e.stopPropagation();
+        state.isDraggingMarker = true;
+        document.body.style.cursor = 'grabbing';
+        slideSound.play();
+        applyMarkerPointer(e);
     }
+
+    function onMarkerLeftDown(e) {
+        if (valTrackArea.classList.contains('disabled')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        state.isDraggingMarkerLeft = true;
+        document.body.style.cursor = 'grabbing';
+        slideSound.play();
+        applyMarkerLeftPointer(e);
+    }
+
+    function onMove(e) {
+        if (state.isDragging) {
+            e.preventDefault();
+            applyPointer(e);
+        } else if (state.isDraggingMarker) {
+            e.preventDefault();
+            applyMarkerPointer(e);
+        } else if (state.isDraggingMarkerLeft) {
+            e.preventDefault();
+            applyMarkerLeftPointer(e);
+        }
+    }
+
     function onUp() {
-        if (!state.isDragging) return;
-        state.isDragging = false;
+        if (state.isDragging) {
+            state.isDragging = false;
+        }
+        if (state.isDraggingMarker) {
+            state.isDraggingMarker = false;
+        }
+        if (state.isDraggingMarkerLeft) {
+            state.isDraggingMarkerLeft = false;
+        }
         document.body.style.cursor = '';
     }
 
@@ -329,6 +381,62 @@
         let val = Math.round((pct / 100) * VAL_MAX);
         setSlider(val, false);
     }
+
+    function applyMarkerPointer(e) {
+        const rect = pctStretch.getBoundingClientRect();
+        if (rect.width === 0) return;
+        let pct = ((e.clientX - rect.left) / rect.width) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        pct = Math.round(pct);
+        setMarkerPercent(pct);
+    }
+
+    function setMarkerPercent(pct) {
+        state.markerPercent = pct;
+        pctMarker.style.left = pct + '%';
+
+        pctMarkerFill.style.left = pct + '%';
+        pctMarkerFill.style.width = (100 - pct) + '%';
+
+        updateMarkerLabel();
+    }
+
+    function updateMarkerLabel() {
+        const pct = state.markerPercent;
+        const diffPct = 100 - pct;
+        const mappedDiffValue = Number.isInteger((state.sliderValue * diffPct) / 100) ?
+            (state.sliderValue * diffPct) / 100 : ((state.sliderValue * diffPct) / 100).toFixed(1);
+
+        pctMarkerLabel.innerHTML = `${diffPct}% &rarr; <strong>${mappedDiffValue}</strong>`;
+    }
+
+    function applyMarkerLeftPointer(e) {
+        const rect = pctStretch.getBoundingClientRect();
+        if (rect.width === 0) return;
+        let pct = ((e.clientX - rect.left) / rect.width) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        pct = Math.round(pct);
+        setMarkerLeftPercent(pct);
+    }
+
+    function setMarkerLeftPercent(pct) {
+        state.markerLeftPercent = pct;
+        pctMarkerLeft.style.left = pct + '%';
+        
+        pctMarkerFillLeft.style.left = '0%';
+        pctMarkerFillLeft.style.width = pct + '%';
+        
+        updateMarkerLeftLabel();
+    }
+    
+    function updateMarkerLeftLabel() {
+        const pct = state.markerLeftPercent;
+        const mappedValue = Number.isInteger((state.sliderValue * pct) / 100) ? 
+            (state.sliderValue * pct) / 100 : ((state.sliderValue * pct) / 100).toFixed(1);
+            
+        pctMarkerLabelLeft.innerHTML = `${pct}% &rarr; <strong>${mappedValue}</strong>`;
+    }
+
 
     /* ============================================================
        PROBLEM GENERATION (values ≤ 50, integers)
@@ -383,7 +491,7 @@
                 `3. Read off the matching value — that's the discount amount\n` +
                 `4. Subtract it from ${p.price} to find the final price\n\n` +
                 `❓ What is the final price after the ${p.pct}% discount?`,
-            answerPromptText: `What is the final price after a ${p.pct}% discount on ${p.price} coins?`,
+            answerPromptText: `The ${product.name} costs ${p.price} coins and is ${p.pct}% off. What is the final price?`,
             hints: [
                 `💡 Hint 1: Drag the slider to ${p.price} on the bottom line. Now the top line shows 0%–100% stretched to ${p.price}.`,
                 `💡 Hint 2: Look at ${p.pct}% on the top line — it lines up with ${p.disc} on the bottom line. So ${p.pct}% of ${p.price} = ${p.disc} coins.`,
@@ -413,7 +521,7 @@
                 `2. Find where ${remPct}% falls on the percentage line\n` +
                 `3. Read the matching value below — that's how much you pay!\n\n` +
                 `❓ How much do you pay (${remPct}% of ${p.price})?`,
-            answerPromptText: `You pay ${remPct}% of ${p.price} coins. How much is that?`,
+            answerPromptText: `The sale says you pay ${remPct}% of ${p.price} coins. How many coins do you pay?`,
             hints: [
                 `💡 Hint 1: If ${p.pct}% is removed, you pay the remaining ${remPct}%.`,
                 `💡 Hint 2: Set slider to ${p.price}. Look at ${remPct}% on the percentage line — it aligns with ${p.final} on the value line.`,
@@ -442,7 +550,7 @@
                 `• So ${p.final} coins = ${remPct}% of the original price\n` +
                 `• Slide the slider until ${remPct}% lines up with ${p.final}\n\n` +
                 `❓ What was the ORIGINAL price before the discount?`,
-            answerPromptText: `What was the original price before the ${p.pct}% discount?`,
+            answerPromptText: `The sale price is ${p.final} coins after a ${p.pct}% discount. What was the original price?`,
             hints: [
                 `💡 Hint 1: ${p.final} coins = ${remPct}% of the original. Drag the slider until ${remPct}% on the top line aligns with ${p.final} below.`,
                 `💡 Hint 2: Try sliding to different values. When you hit the right one, ${remPct}% will line up perfectly with ${p.final}.`,
@@ -471,7 +579,7 @@
                 `2. Look at where ${p.disc} falls on the value line\n` +
                 `3. Read the matching percentage above it\n\n` +
                 `❓ What percentage discount is ${p.disc} coins off ${p.price} coins?`,
-            answerPromptText: `${p.disc} coins off ${p.price} coins = what percentage?`,
+            answerPromptText: `A discount of ${p.disc} coins is taken from ${p.price} coins. What is the discount percentage?`,
             hints: [
                 `💡 Hint 1: Set the slider to ${p.price}. The percentage line now covers 0% to 100% = ${p.price} coins.`,
                 `💡 Hint 2: Find ${p.disc} on the value line. Look up to the percentage line above it — what % is it?`,
@@ -513,6 +621,7 @@
 
         currentProblemEl.textContent = state.problemIndex + 1;
         productEmoji.textContent = p.product.emoji;
+        productName.textContent = p.product.name;
 
         // Product card
         if (p.type === 'reverse') {
@@ -562,6 +671,8 @@
         });
 
         setSlider(0, false);
+        setMarkerPercent(100);
+        setMarkerLeftPercent(0);
         clearDiscountHighlights();
         clearConnectors();
         valTrackArea.classList.remove('disabled');
@@ -584,8 +695,6 @@
         // Instruction
         nlInstruction.textContent = '👆 Drag the slider on the bottom line to set the price. The percentage line above will stretch to match!';
 
-        setMonsterSpeech(pick(GREETINGS));
-        setMonsterExpr('happy');
     }
 
     /* ============================================================
@@ -612,8 +721,6 @@
     function onCorrect(p) {
         successSound.play();
         answerInput.classList.add('correct');
-        setMonsterExpr('happy');
-        setMonsterSpeech(pick(ENCOURAGEMENTS));
 
         const pts = state.attempts === 1 ? 100 : state.attempts === 2 ? 60 : 30;
         state.score += pts;
@@ -657,22 +764,15 @@
         setTimeout(() => answerInput.classList.remove('wrong'), 400);
         state.streak = 0;
         refreshScore();
-        setMonsterExpr('sad');
-        setMonsterSpeech(pick(TRY_AGAIN_MSGS));
 
         answerFeedbackEl.textContent = `❌ Not quite. Try again! (Attempt ${state.attempts})`;
         answerFeedbackEl.className = 'answer-feedback-inline wrong-msg';
 
-        // Change layout for wrong answer
-        const shopScene = document.getElementById('shop-scene');
-        shopScene.classList.add('wrong-answer');
-        document.getElementById('product-area').style.display = 'none';
-        document.getElementById('info-panel').style.display = 'none';
-        document.querySelector('.question-card').style.display = 'none';
+        // Show visual guidance on number lines
+        showWrongAnswerGuidance(p);
 
         // Unlock hints progressively
         updateHintAccess(p);
-        showInlineSolution(p);
 
         if (state.attempts >= 4) {
             showAnswerBtn.style.display = 'flex';
@@ -716,8 +816,6 @@
             showHintBtn.disabled = true;
         }
 
-        setMonsterSpeech('Check the hint! 💡');
-        setMonsterExpr('thinking');
     }
 
     function showHintVisualization(p, level) {
@@ -760,25 +858,56 @@
         addConnector(p.finalPrice, 'connector-final');
     }
 
-    function revealAllCalcSteps(p) {
-        calcStepEls[0].el.classList.add('revealed');
-        calcStepEls[0].val.textContent = p.price + ' coins = 100%';
+    function showWrongAnswerGuidance(p) {
+        // Clear any existing highlights
+        clearDiscountHighlights();
+        clearConnectors();
 
-        calcStepEls[1].el.classList.add('revealed');
-        if (p.type === 'find_percent') {
-            calcStepEls[1].val.textContent = p.discountAmt + ' coins = ' + p.discountPct + '%';
-        } else {
-            calcStepEls[1].val.textContent = p.discountPct + '% = ' + p.discountAmt + ' coins';
-        }
+        // Step 1: Animate slider to full price after a delay
+        setTimeout(() => {
+            setSlider(p.price, true);
+            nlInstruction.textContent = 'First, set the slider to the full price shown on the product card.';
+            setTimeout(() => {
+                // Step 2: Show discount visualization
+                showDiscountOnLines(p.price, p.discountPct);
+                addConnector(p.price, '');
+                nlInstruction.textContent = `Now you can see the ${p.discountPct}% discount region on the percentage line.`;
 
-        calcStepEls[2].el.classList.add('revealed', 'highlight');
-        if (p.type === 'find_percent') {
-            calcStepEls[2].val.textContent = p.discountPct + '% ✓';
-        } else if (p.type === 'reverse') {
-            calcStepEls[2].val.textContent = p.price + ' coins ✓';
-        } else {
-            calcStepEls[2].val.textContent = p.finalPrice + ' coins ✓';
-        }
+                setTimeout(() => {
+                    // Step 3: Show final price connection
+                    addConnector(p.finalPrice, 'connector-final');
+                    nlInstruction.textContent = `The final price is where the ${100 - p.discountPct}% mark connects to the value line.`;
+
+                    // Update calculation breakdown with visual cues
+                    setTimeout(() => {
+                        calcStepEls[0].el.classList.add('revealed');
+                        calcStepEls[0].val.textContent = p.price + ' coins = 100%';
+
+                        setTimeout(() => {
+                            calcStepEls[1].el.classList.add('revealed');
+                            if (p.type === 'find_percent') {
+                                calcStepEls[1].val.textContent = p.discountAmt + ' coins = ?%';
+                            } else {
+                                calcStepEls[1].val.textContent = p.discountPct + '% = ' + p.discountAmt + ' coins';
+                            }
+
+                            setTimeout(() => {
+                                calcStepEls[2].el.classList.add('revealed');
+                                if (p.type === 'find_percent') {
+                                    calcStepEls[2].val.textContent = p.discountPct + '%';
+                                } else if (p.type === 'reverse') {
+                                    calcStepEls[2].val.textContent = p.price + ' coins';
+                                } else {
+                                    calcStepEls[2].val.textContent = p.finalPrice + ' coins';
+                                }
+
+                                nlInstruction.textContent = 'Use the number lines to visualize the discount calculation!';
+                            }, 1500);
+                        }, 1500);
+                    }, 1000);
+                }, 2000);
+            }, 2000);
+        }, 1000);
     }
 
     /* ============================================================
@@ -843,7 +972,7 @@
 
         if (correct) {
             feedbackIcon.textContent = pick(['🎉', '🌟', '🏆', '💯', '🎊']);
-            feedbackTitle.textContent = pick(ENCOURAGEMENTS).replace(/[^\w\s!]/g, '').trim() || 'Awesome!';
+            feedbackTitle.textContent = pick(SUCCESS_MESSAGES);
             feedbackMessage.textContent = '+' + pts + ' points!  Streak: ' + state.streak + ' 🔥';
             feedbackDetail.innerHTML = '';
         } else {
@@ -876,17 +1005,6 @@
     }
 
     function hideFeedback() { feedbackOverlay.classList.remove('active'); }
-
-    /* ---------- monster ---------- */
-    function setMonsterSpeech(t) {
-        speechText.textContent = t;
-        const b = speechText.closest('.speech-bubble');
-        b.style.animation = 'none'; b.offsetHeight; b.style.animation = 'fadeInUp .3s ease-out';
-    }
-    function setMonsterExpr(e) {
-        gameMonster.querySelector('.monster-mouth').className = 'monster-mouth ' + e;
-        gameMonster.className = 'monster-body ' + e;
-    }
 
     function refreshScore() {
         scoreEl.textContent = state.score;
@@ -967,9 +1085,6 @@
         resultsStars.textContent = ratio >= .8 ? '⭐⭐⭐' : ratio >= .6 ? '⭐⭐' : ratio >= .3 ? '⭐' : '💪 Keep trying!';
         resultsTitle.textContent = ratio >= .8 ? 'Amazing Work! 🏆' : ratio >= .5 ? 'Good Job! 🌟' : 'Keep Practicing! 💪';
 
-        const rm = $('#results-monster .monster-mouth');
-        rm.className = 'monster-mouth ' + (ratio >= .5 ? 'happy' : 'sad');
-
         if (ratio >= .6 && state.level < 4) {
             const nl = state.level + 1;
             if (!state.unlockedLevels.includes(nl)) state.unlockedLevels.push(nl);
@@ -977,6 +1092,10 @@
         } else {
             nextLevelBtn.style.display = 'none';
         }
+        // Ensure levels 3 and 4 are always unlocked
+        if (!state.unlockedLevels.includes(3)) state.unlockedLevels.push(3);
+        if (!state.unlockedLevels.includes(4)) state.unlockedLevels.push(4);
+        updateLevelBtns();
         if (ratio >= .6) setTimeout(launchConfetti, 300);
     }
 
