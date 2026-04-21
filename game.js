@@ -280,17 +280,23 @@
     function showDiscountOnLines(price, discountPct) {
         const discountAmt = price * discountPct / 100;
         const finalPrice = price - discountAmt;
+        const isFindPercent = state.problem && state.problem.type === 'find_percent';
 
-        // Percentage line: show discount region (100% - discountPct) to 100%
-        const remainPct = 100 - discountPct;
-        pctFillDiscount.style.left = remainPct + '%';
-        pctFillDiscount.style.width = discountPct + '%';
+        // Keep the top line unhighlighted for all levels.
+        pctFillDiscount.style.left = '0%';
+        pctFillDiscount.style.width = '0%';
 
-        // Value line: show discount region
-        const finalLeft = (finalPrice / VAL_MAX) * 100;
-        const discWidth = (discountAmt / VAL_MAX) * 100;
-        valFillDiscount.style.left = finalLeft + '%';
-        valFillDiscount.style.width = discWidth + '%';
+        if (isFindPercent) {
+            // Highlight from 0 to the discount amount so it aligns with the answer marker.
+            valFillDiscount.style.left = '0%';
+            valFillDiscount.style.width = (discountAmt / VAL_MAX) * 100 + '%';
+        } else {
+            // Value line: show discount region
+            const finalLeft = (finalPrice / VAL_MAX) * 100;
+            const discWidth = (discountAmt / VAL_MAX) * 100;
+            valFillDiscount.style.left = finalLeft + '%';
+            valFillDiscount.style.width = discWidth + '%';
+        }
     }
 
     function clearDiscountHighlights() {
@@ -554,7 +560,7 @@
                 `• So ${p.final} coins = ${remPct}% of the original price\n` +
                 `• Slide the slider until ${remPct}% lines up with ${p.final}\n\n` +
                 `❓ What was the ORIGINAL price before the discount?`,
-            answerPromptText: `The sale price is ${p.final} coins after a ${p.pct}% discount. What was the original price?`,
+            answerPromptText: `The discounted price is ${p.final} coins after a ${p.pct}% discount. What was the original price?`,
             hints: [
                 `💡 Hint 1: ${p.final} coins = ${remPct}% of the original. Drag the slider until ${remPct}% on the top line aligns with ${p.final} below.`,
                 `💡 Hint 2: Try sliding to different values. When you hit the right one, ${remPct}% will line up perfectly with ${p.final}.`,
@@ -657,7 +663,7 @@
 
         // Calc labels
         if (p.type === 'reverse') {
-            calcStepEls[0].el.querySelector('.calc-label').textContent = 'Sale Price:';
+            calcStepEls[0].el.querySelector('.calc-label').textContent = 'Discounted Price:';
             calcStepEls[1].el.querySelector('.calc-label').textContent = 'Discount:';
             calcStepEls[2].el.querySelector('.calc-label').textContent = 'Original:';
         } else if (p.type === 'find_percent') {
@@ -850,7 +856,7 @@
         if (level >= 2) {
             // Hint 2: show discount region
             showDiscountOnLines(p.price, p.discountPct);
-            addConnector(p.finalPrice, 'connector-final');
+            addConnector(p.type === 'find_percent' ? p.discountAmt : p.finalPrice, 'connector-final');
             addConnector(p.price, '');
             calcStepEls[1].el.classList.add('revealed');
             if (p.type === 'find_percent') {
@@ -873,17 +879,14 @@
     }
 
     function buildQuestionMarkup(p) {
-        const priceLabel = p.type === 'reverse' ? 'Sale Price' : 'Price';
+        const priceLabel = p.type === 'reverse' ? 'Discounted Price' : 'Price';
         const priceValue = p.type === 'reverse' ? p.finalPrice : p.price;
         const discountLabel = p.type === 'find_percent' ? 'Discount' : 'Sale';
         const discountValue = p.type === 'find_percent'
             ? `${p.discountAmt} coins OFF`
             : `${p.discountPct}% OFF`;
 
-        let actionText = 'Find the final price';
-        if (p.type === 'reverse') actionText = 'Find the original price';
-        if (p.type === 'find_percent') actionText = 'Find the discount percent';
-        if (p.type === 'remaining') actionText = 'Find how many coins you pay';
+        const actionText = p.answerPromptText;
 
         return `
             <span class="question-line">
@@ -902,17 +905,14 @@
     }
 
     function buildQuestionMarkup(p) {
-        const priceLabel = p.type === 'reverse' ? 'Sale Price' : 'Price';
+        const priceLabel = p.type === 'reverse' ? 'Discounted Price' : 'Price';
         const priceValue = p.type === 'reverse' ? p.finalPrice : p.price;
         const discountLabel = p.type === 'find_percent' ? 'Discount' : 'Sale';
         const discountValue = p.type === 'find_percent'
             ? `${p.discountAmt} coins OFF`
             : `${p.discountPct}% OFF`;
 
-        let actionText = 'Find the final price';
-        if (p.type === 'reverse') actionText = 'Find the original price';
-        if (p.type === 'find_percent') actionText = 'Find the discount percent';
-        if (p.type === 'remaining') actionText = 'Find how many coins you pay';
+        const actionText = p.answerPromptText;
 
         return `
             <span class="question-line">
@@ -955,7 +955,7 @@
         showDiscountOnLines(p.price, p.discountPct);
         clearConnectors();
         addConnector(p.price, '');
-        addConnector(p.finalPrice, 'connector-final');
+        addConnector(p.type === 'find_percent' ? p.discountAmt : p.finalPrice, 'connector-final');
     }
 
     function showWrongAnswerGuidance(p) {
@@ -975,8 +975,10 @@
 
                 setTimeout(() => {
                     // Step 3: Show final price connection
-                    addConnector(p.finalPrice, 'connector-final');
-                    nlInstruction.textContent = `The final price is where the ${100 - p.discountPct}% mark connects to the value line.`;
+                    addConnector(p.type === 'find_percent' ? p.discountAmt : p.finalPrice, 'connector-final');
+                    nlInstruction.textContent = p.type === 'find_percent'
+                        ? `The correct percentage is where ${p.discountAmt} coins lines up on the value line.`
+                        : `The final price is where the ${100 - p.discountPct}% mark connects to the value line.`;
 
                     // Update calculation breakdown with visual cues
                     setTimeout(() => {
