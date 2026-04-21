@@ -418,10 +418,7 @@
     function updateMarkerLabel() {
         const pct = state.markerPercent;
         const diffPct = 100 - pct;
-        const mappedDiffValue = Number.isInteger((state.sliderValue * diffPct) / 100) ?
-            (state.sliderValue * diffPct) / 100 : ((state.sliderValue * diffPct) / 100).toFixed(1);
-
-        pctMarkerLabel.innerHTML = `${diffPct}% &rarr; <strong>${mappedDiffValue}</strong>`;
+        pctMarkerLabel.innerHTML = `${diffPct}%`;
     }
 
     function applyMarkerLeftPointer(e) {
@@ -445,10 +442,7 @@
     
     function updateMarkerLeftLabel() {
         const pct = state.markerLeftPercent;
-        const mappedValue = Number.isInteger((state.sliderValue * pct) / 100) ? 
-            (state.sliderValue * pct) / 100 : ((state.sliderValue * pct) / 100).toFixed(1);
-            
-        pctMarkerLabelLeft.innerHTML = `${pct}% &rarr; <strong>${mappedValue}</strong>`;
+        pctMarkerLabelLeft.innerHTML = `${pct}%`;
     }
 
 
