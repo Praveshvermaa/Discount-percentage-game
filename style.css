@@ -2714,8 +2714,10 @@ body {
     border-top: 2px solid var(--accent);
     padding: 20px;
     z-index: 2000;
-    transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(100%) scale(0.98);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease-out;
+    pointer-events: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2724,7 +2726,9 @@ body {
 }
 
 .keypad-overlay.active {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .keypad-display {
@@ -2821,7 +2825,7 @@ body {
 
     .keypad-overlay.active {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(-50%) translateY(0) scale(1);
         pointer-events: auto;
     }
 }
