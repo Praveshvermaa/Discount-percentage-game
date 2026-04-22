@@ -35,7 +35,7 @@
                 <span class="title-icon">🏪</span>
                 <span class="title-text">Discount Den</span>
             </h1>
-            <p class="subtitle">Use product cards and number lines to solve discount questions.</p>
+            <!-- <p class="subtitle">Use product cards and number lines to solve discount questions.</p> -->
 
             <div class="splash-monster-row">
                 <div class="monster-body" id="splash-monster">
@@ -48,9 +48,6 @@
                     <div class="monster-mouth happy"></div>
                     <div class="monster-horn left-horn"></div>
                     <div class="monster-horn right-horn"></div>
-                </div>
-                <div class="speech-bubble splash-bubble">
-                    <p>Hey there! I need your help with prices today! 🎉</p>
                 </div>
             </div>
 
@@ -187,8 +184,10 @@
 
 
                 <div class="dual-numberline-container" id="dual-nl-container">
-                    <!-- <div id="percentage-marker-instruction" class="slider-instruction">📍 Use marker to measure percentage</div> -->
-                    <!-- <br> -->
+                    <div id="percentage-marker-instruction" class="slider-instruction">📍 Set the full price → then drag
+                        the marker to find %</div>
+                    <br>
+                    <br>
                     <!-- PERCENTAGE LINE (top) – stretchable -->
                     <div class="nl-row nl-row-percent">
                         <div class="nl-row-label"><span class="nl-row-icon nl-icon-pct">%</span></div>
@@ -266,6 +265,7 @@
 
                 <!-- Custom Calculator Keypad -->
                 <div id="keypad-overlay" class="keypad-overlay">
+                    <div class="keypad-display" id="keypad-display"></div>
                     <div class="keypad-grid">
                         <button class="keypad-btn" data-val="1">1</button>
                         <button class="keypad-btn" data-val="2">2</button>

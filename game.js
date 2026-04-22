@@ -529,7 +529,7 @@
                 `2. Find where ${remPct}% falls on the percentage line\n` +
                 `3. Read the matching value below — that's how much you pay!\n\n` +
                 `❓ How much do you pay (${remPct}% of ${p.price})?`,
-            answerPromptText: `The sale says you pay ${remPct}% of ${p.price} coins. How many coins do you pay?`,
+            answerPromptText: `You pay ${remPct}%. What is the price?`,
             hints: [
                 `💡 Hint 1: If ${p.pct}% is removed, you pay the remaining ${remPct}%.`,
                 `💡 Hint 2: Set slider to ${p.price}. Look at ${remPct}% on the percentage line — it aligns with ${p.final} on the value line.`,
@@ -635,8 +635,12 @@
         productEmoji.textContent = p.product.emoji;
         productName.textContent = p.product.name;
 
-        // Set MRP Badge (always show original price)
-        mrpText.textContent = 'MRP: ' + p.price + ' 🪙';
+        // Set MRP Badge (show Sale Price for Level 3 / reverse problems)
+        if (p.type === 'reverse') {
+            mrpText.textContent = 'Discounted Price: ' + p.finalPrice + ' 🪙';
+        } else {
+            mrpText.textContent = 'MRP: ' + p.price + ' 🪙';
+        }
 
         // Product card - Discount badge
         if (p.type === 'reverse') {
@@ -653,6 +657,8 @@
             cardQText = 'What is the original price?';
         } else if (p.type === 'find_percent') {
             cardQText = 'What is the discount percentage?';
+        } else if (p.type === 'remaining') {
+            cardQText = `What is the ${p.discountPct}% price?`;
         } else {
             cardQText = 'What is the final price?';
         }
@@ -1317,15 +1323,21 @@
     function initKeypad() {
         const keypadOverlay = document.getElementById('keypad-overlay');
         const answerInput = document.getElementById('answer-input');
+        const keypadDisplay = document.getElementById('keypad-display');
         const keypadBtns = document.querySelectorAll('.keypad-btn');
         const doneBtn = document.getElementById('keypad-done-btn');
 
         if (!keypadOverlay || !answerInput) return;
 
+        const updateKeypadDisplay = () => {
+            if (keypadDisplay) keypadDisplay.textContent = answerInput.value;
+        };
+
         // Open keypad on input click or focus
         const openKeypad = (e) => {
             e.stopPropagation();
             keypadOverlay.classList.add('active');
+            updateKeypadDisplay();
         };
 
         answerInput.addEventListener('click', openKeypad);
@@ -1365,6 +1377,8 @@
                         answerInput.value = newVal;
                     }
                 }
+
+                updateKeypadDisplay();
 
                 // Trigger input event for any other logic listening
                 answerInput.dispatchEvent(new Event('input'));
